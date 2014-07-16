@@ -1,4 +1,4 @@
-**This is a modified version of PhantomCSS** The modifications overwrite diffed images over original images in the specified screenshots directory so that only diffed images will be pushed to GitHub and reviewed in the GitHub file diff GUI. This plugin alone will not cleanup after itself and will leave images with .diff and .fail extensions in your screenshots folder.  It is meant to be used along with grunt-phantomcss-github-diff plugin which will run the task, spawn the phantom/casper process, and cleanup leftovers.
+**This is a modified version of PhantomCSS** The modifications overwrite diffed images over original images in the specified screenshots directory so that only diffed images will be pushed to GitHub and reviewed in the GitHub file diff GUI. This plugin alone will not cleanup after itself and will leave images with .diff and .fail extensions in your screenshots folder.  It is meant to be used along with [grunt-phantomcss-gitdiff](https://github.com/dtothefp/grunt-phantomcss-gitdiff) which will run the task, spawn the phantom/casper process, and cleanup leftovers.
 
 PhantomCSS-GitHub-Diff
 ==========
@@ -10,7 +10,7 @@ PhantomCSS takes screenshots captured by CasperJS and compares them to previousl
 
 Screenshot based regression testing can only work when UI is predictable. It's possible to hide mutable UI components with PhantomCSS but it would be better to test static pages or drive the UI with faked data during test runs.
 
-### Example
+###NOTE: The Casper test file example below is not necessary unless you want to test based upon interactive behavior. If you would only like to diff pages based upon CSS/JS changes the automated test file exists in phantomjs/lib/pageTest.js in the grunt plugin [grunt-phantomcss-gitdiff](https://github.com/dtothefp/grunt-phantomcss-gitdiff).
 
 ```javascript
 casper.
