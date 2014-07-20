@@ -1,21 +1,16 @@
 /*
 <<<<<<< HEAD
-Author: James Cryer
-Company: Huddle
-Last updated date: 14 Jan 2014
-URL: https://github.com/Huddle/PhantomCSS
-More: http://tldr.huddle.com/blog/css-testing/
-=======
-James Cryer / Huddle / 2014
-https://github.com/Huddle/PhantomCSS
-http://tldr.huddle.com/blog/css-testing/
->>>>>>> c63d5449ec40a62ebfe2c1d310442270a403d28f
+Author: David Fox-Powell
+Company: Optimizely
+Last updated date: 20 July 2014
+URL: https://github.com/dtothefp/phantomcss-gitdiff
 */
 
 var fs = require('fs');
 
 var _src = '.'+fs.separator+'screenshots';
 var _failures = '.'+fs.separator+'failures';
+var _serverRoot;
 var _count = 0;
 var _realPath;
 var _diffsToProcess = [];
@@ -55,15 +50,16 @@ function update(options){
 
   //DFP: added
   _gitDiff = options.gitDiff;
+  _serverRoot = options.serverRoot;
 
   casper = options.casper || casper;
   _libraryRoot = options.libraryRoot || _libraryRoot;
   
   _src = stripslash(options.screenshotRoot || _src);
-  if ( typeof options.failedComparisonsRoot === 'undefined' || options.failedComparisonsRoot === _src ) {
-  	_failures = stripslash( _failures );
+  if ( options.failedComparisonsRoot === _src ) {
+    _failures = stripslash( _failures );
   } else {
-  	_failures = stripslash( options.failedComparisonsRoot );
+    _failures = stripslash( options.failedComparisonsRoot );
   };
 
   _fileNameGetter = options.fileNameGetter || _fileNameGetter;
@@ -116,11 +112,15 @@ function turnOffAnimations(){
 function _prettyPath(path) {
   var afterLastSlash = path.substr(path.lastIndexOf('/') + 1);
   var re = /(\s)|(\.)|(-)|\//g; // replace all spaces, periods, and dashes
-  if( !!afterLastSlash.match(/^index\.html$/) ) {
-    return 'root_index_page';
-  } else {
-    return path.replace(/\.html/, '').replace(re, '_').toLowerCase();
+  // if( !!afterLastSlash.match(/^index\.html$/) ) {
+  //   return 'root_index_page';
+  // } else {
+  //   return path.replace(/\.html/, '').replace(re, '_').toLowerCase();
+  // }
+  if (typeof _serverRoot !== 'undefined') {
+    path = path.replace(_serverRoot, '');
   }
+  return path.replace(/\.html/, '').replace(re, '_').toLowerCase();
 }
 
 function _fileNameGetter(root, fileName){
@@ -369,10 +369,10 @@ function compareFiles(baseFile, file) {
               var failFile, safeFileName, increment;
 
               // DPF NOTE: if there is a failures directory specified in the init function
-              if(_failures){
-              	if ( !fs.isDirectory(_failures) ) {
-              		fs.makeDirectory(_failures);
-              	}
+              if(typeof _failures !== undefined){
+                if ( !fs.isDirectory(_failures) ) {
+                  fs.makeDirectory(_failures);
+                }
 
                 // flattened structure for failed diffs so that it is easier to preview
                 failFile = _failures + fs.separator + file.split(/\/|\\/g).pop().replace('.diff.png', '').replace('.png', '');
