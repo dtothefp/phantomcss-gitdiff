@@ -1,5 +1,4 @@
 /*
-<<<<<<< HEAD
 Author: David Fox-Powell
 Company: Optimizely
 Last updated date: 20 July 2014
