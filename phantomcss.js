@@ -55,10 +55,15 @@ function update(options){
   _libraryRoot = options.libraryRoot || _libraryRoot;
   
   _src = stripslash(options.screenshotRoot || _src);
+
   if ( options.failedComparisonsRoot === _src ) {
     _failures = stripslash( _failures );
   } else {
-    _failures = stripslash( options.failedComparisonsRoot );
+    if(options.failedComparisonsRoot !== undefined) {
+      _failures = stripslash( options.failedComparisonsRoot );
+    } else {
+      _failures = options.failedComparisonsRoot;
+    }
   };
 
   _fileNameGetter = options.fileNameGetter || _fileNameGetter;
@@ -366,9 +371,8 @@ function compareFiles(baseFile, file) {
             },
             function () {
               var failFile, safeFileName, increment;
-
               // DPF NOTE: if there is a failures directory specified in the init function
-              if(typeof _failures !== undefined){
+              if(_failures !== undefined){
                 if ( !fs.isDirectory(_failures) ) {
                   fs.makeDirectory(_failures);
                 }
